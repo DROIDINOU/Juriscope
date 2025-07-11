@@ -1,11 +1,14 @@
+version: 1
 services:
   - type: web
-    name: mon-django-app
+    name: monsite
     env: python
-    buildCommand: ""
-    startCommand: gunicorn monsite.wsgi:application --chdir backend
+    buildCommand: "pip install -r requirements.txt"  # Assure-toi que toutes les dépendances sont installées
+    startCommand: "gunicorn monsite.wsgi:application --chdir backend --bind 0.0.0.0:10000"
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: monsite.settings
       - key: PYTHON_VERSION
         value: 3.12.0
+    disk:
+      size: 1  # Si nécessaire, tu peux ajuster la taille du disque pour la persistance des données

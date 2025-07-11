@@ -101,8 +101,11 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_URL = '/static/'
 
+# Répertoire où tu mets tes fichiers statiques durant le développement
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
+# Répertoire où Django va collecter les fichiers statiques en production
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

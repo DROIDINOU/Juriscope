@@ -1,0 +1,30 @@
+# Environnement virtuel
+venv/
+.env
+*.env
+
+# Fichiers Python compilés
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Base de données SQLite
+db.sqlite3
+
+# Fichiers de migration générés automatiquement
+**/migrations/
+!*/migrations/__init__.py
+
+# Dossiers de cache
+*.log
+*.pot
+*.pyc
+.DS_Store
+
+# Django static/media (si générés automatiquement)
+staticfiles/
+media/
+
+# VS Code, PyCharm, etc.
+.vscode/
+.idea/

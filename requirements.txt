@@ -1,0 +1,17 @@
+annotated-types==0.7.0
+asgiref==3.9.0
+camel-converter==4.0.1
+certifi==2025.6.15
+charset-normalizer==3.4.2
+Django==5.2.4
+django-cors-headers==4.7.0
+idna==3.10
+meilisearch==0.36.0
+pydantic==2.11.7
+pydantic_core==2.33.2
+requests==2.32.4
+sqlparse==0.5.3
+typing-inspection==0.4.1
+typing_extensions==4.14.0
+tzdata==2025.2
+urllib3==2.5.0

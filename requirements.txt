@@ -89,7 +89,6 @@ pycparser==2.21
 pydantic==2.11.7
 pydantic_core==2.33.2
 pyee==11.1.1
-pygame==2.5.2
 PyJWT==1.7.1
 PyMuPDF==1.26.3
 pyngrok==7.2.12

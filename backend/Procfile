@@ -1,1 +1,1 @@
-web: gunicorn monsite.wsgi:application --chdir backend
+web: python manage.py collectstatic --noinput && gunicorn monsite.wsgi:application --chdir backend

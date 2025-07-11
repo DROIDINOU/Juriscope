@@ -23,7 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.static',
+    'django.contrib.staticfiles',  # Correcte la ligne ici
     'veille',  # Ajoute cette ligne pour ton application 'veille'
     'corsheaders',  # Ajoute cette ligne pour le CORS
 ]

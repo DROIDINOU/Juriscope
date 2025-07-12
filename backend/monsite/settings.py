@@ -100,8 +100,7 @@ STATIC_URL = '/static/'
 
 # Répertoire où Django va collecter les fichiers statiques en production
 STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = '/opt/render/project/src/staticfiles'
-
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Configuration de WhiteNoise pour gérer les fichiers statiques en production
 if not DEBUG:
     # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)

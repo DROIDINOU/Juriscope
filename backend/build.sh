@@ -20,4 +20,4 @@ fi
 
 # Applique les migrations de la base de données
 echo "Application des migrations..."
-python manage.py migrate
+#python manage.py migrate

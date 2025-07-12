@@ -1,10 +1,6 @@
 from pathlib import Path
 import os
-#from dotenv import load_dotenv
 
-# Charge uniquement les variables d'environnement locales si le fichier .env existe
-#if os.path.exists(".env"):
-    #load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -66,19 +62,15 @@ TEMPLATES = [
     },
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-WSGI_APPLICATION = 'monsite.wsgi.application'
-
-# Database configuration for PostgreSQL
+# Configuration de la base de données (postgresql ici)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),  # Récupère la variable d'environnement DB_NAME
-        'USER': os.getenv('DB_USER'),  # Récupère la variable d'environnement DB_USER
-        'PASSWORD': os.getenv('DB_PASSWORD'),  # Récupère la variable d'environnement DB_PASSWORD
-        'HOST': os.getenv('DB_HOST', 'localhost'),  # Récupère DB_HOST ou 'localhost' si non défini
-        'PORT': os.getenv('DB_PORT', '5432'),      # Récupère DB_PORT ou '5432' si non défini
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
@@ -106,13 +98,22 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 
-# Répertoire où tu mets tes fichiers statiques durant le développement
-STATICFILES_DIRS = [BASE_DIR / 'static']
-
 # Répertoire où Django va collecter les fichiers statiques en production
+STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = '/opt/render/project/src/staticfiles'
-if not os.path.exists(STATIC_ROOT):
-    os.makedirs(STATIC_ROOT)
+
+# Configuration de WhiteNoise pour gérer les fichiers statiques en production
+if not DEBUG:
+    # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+    # Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
+    # and renames the files with unique names for each version to support long-term caching
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Enable Brotli compression (optionnel, mais recommandé pour les performances)
+# STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
+
 print("Fichiers statiques collectés à : ", STATIC_ROOT)
-STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

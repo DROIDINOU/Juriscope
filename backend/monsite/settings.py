@@ -111,6 +111,8 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Répertoire où Django va collecter les fichiers statiques en production
 STATIC_ROOT = '/opt/render/project/src/staticfiles'
-print("⚠️ STATIC_ROOT =", STATIC_ROOT)
+if not os.path.exists(STATIC_ROOT):
+    os.makedirs(STATIC_ROOT)
+print("Fichiers statiques collectés à : ", STATIC_ROOT)
 STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

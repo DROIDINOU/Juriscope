@@ -8,5 +8,11 @@ pip install -r requirements.txt
 # Collecte les fichiers statiques pour la production
 python manage.py collectstatic --no-input
 
+# Créer le répertoire staticfiles si nécessaire
+if [ ! -d "staticfiles" ]; then
+    echo "Création du répertoire staticfiles"
+    mkdir staticfiles
+fi
+
 # Applique les migrations de la base de données
 python manage.py migrate

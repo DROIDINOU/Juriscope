@@ -98,6 +98,8 @@
 
 
 
+
+
 </style>
 {% endblock %}
 
@@ -293,17 +295,6 @@ Elle inclut notamment : les constitutions de sociétés, les modifications statu
                 </div>
 
                 <!-- 🟢 Bouton et liste d'annotations en dehors de #searchResults -->
-                <div class="container my-4">
-                    <h6>📝 Sélectionnez un passage dans les résultats, puis cliquez :</h6>
-                    <button id="annotateBtn" class="btn btn-sm btn-outline-primary mt-2">
-                        ➕ Annoter la sélection
-                    </button>
-
-                    <div id="annotationsList" class="mt-4">
-                        <h6>💬 Commentaires ajoutés :</h6>
-                        <ul class="list-group" id="commentList"></ul>
-                    </div>
-                </div>
 
             </div>
         </div>
@@ -580,9 +571,15 @@ text = highlightGlobalKeywordInText(text, query.replace(/^=/, ""));
                     <a class="btn btn-outline-secondary btn-sm ml-2" href="${url}" target="_blank">
                         Voir le document
                     </a>
+                    <button class="btn btn-sm btn-outline-primary ml-2 annotate-inline-btn" data-item-id="${itemId}">
+    ➕ Annoter
+</button>
                 </div>
                 <div class="collapse mt-2" id="${itemId}">
   <div class="card card-body annotation-zone">${text}</div>
+<ul class="list-group mt-2 commentList" data-id="${itemId}"></ul>
+
+                </div>
                 </div>
             </li>
         `;
@@ -604,6 +601,8 @@ document.getElementById("searchType").addEventListener("change", function () {
     const selectedType = this.value;
     searchInput.placeholder = placeholders[selectedType] || "";
 });
+
+
 
 
 
@@ -654,15 +653,75 @@ document.getElementById("annotateBtn").addEventListener("click", function () {
   range.insertNode(span);
   selection.removeAllRanges();
 
+  const commentList = document.querySelector(`ul.commentList[data-id="${itemId}"]`);
+  if (commentList) {
+    const li = document.createElement("li");
+    li.className = "list-group-item";
+    li.innerHTML = `<strong>${text}</strong><br>${comment}`;
+    commentList.appendChild(li);
+  }
+});
+
+
+
+
+
+</script>
+<script>
+document.addEventListener("click", function (e) {
+  if (!e.target.classList.contains("annotate-inline-btn")) return;
+
+  const button = e.target;
+  const itemId = button.getAttribute("data-item-id");
+  const itemDiv = document.getElementById(itemId);
+  if (!itemDiv) return;
+
+  const selection = window.getSelection();
+  const text = selection.toString().trim();
+
+  if (!text) {
+    alert("Sélectionnez un passage à annoter dans le texte affiché.");
+    return;
+  }
+
+  // Vérifie que la sélection est bien dans une .annotation-zone
+  let node = selection.anchorNode;
+  let valid = false;
+  while (node) {
+    if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains("annotation-zone")) {
+      valid = true;
+      break;
+    }
+    node = node.parentElement || node.parentNode;
+  }
+
+  if (!valid) {
+    alert("Veuillez sélectionner un texte dans une zone annotable.");
+    return;
+  }
+
+  const comment = prompt("Commentaire sur : « " + text + " »");
+  if (!comment) return;
+
+  const range = selection.getRangeAt(0);
+  const span = document.createElement("span");
+  span.style.backgroundColor = "#fff3cd";
+  span.style.borderBottom = "2px dotted #ffc107";
+  span.setAttribute("title", comment);
+  span.className = "annotated-text";
+  span.textContent = text;
+
+  range.deleteContents();
+  range.insertNode(span);
+  selection.removeAllRanges();
+
+  // Ajouter aussi à la liste globale
   const commentList = document.getElementById("commentList");
   const li = document.createElement("li");
   li.className = "list-group-item";
   li.innerHTML = `<strong>${text}</strong><br>${comment}`;
   commentList.appendChild(li);
 });
-
-
-
 </script>
 
 

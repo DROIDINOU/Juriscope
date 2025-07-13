@@ -293,15 +293,6 @@ Elle inclut notamment : les constitutions de sociétés, les modifications statu
         </div>
 
     </div>
-    <div class="container my-4">
-  <h6>📝 Sélectionnez un passage dans les résultats, puis cliquez :</h6>
-  <button id="annotateBtn" class="btn btn-sm btn-outline-primary mt-2">➕ Annoter la sélection</button>
-
-  <div id="annotationsList" class="mt-4">
-    <h6>💬 Commentaires ajoutés :</h6>
-    <ul class="list-group" id="commentList"></ul>
-  </div>
-</div>
 </div>
 
 <!-- /.container-fluid -->
@@ -575,7 +566,7 @@ text = highlightGlobalKeywordInText(text, query.replace(/^=/, ""));
                     </a>
                 </div>
                 <div class="collapse mt-2" id="${itemId}">
-                    <div class="card card-body">${text}</div>
+  <div class="card card-body annotation-zone">${text}</div>
                 </div>
             </li>
         `;
@@ -610,6 +601,26 @@ document.getElementById("annotateBtn").addEventListener("click", function () {
     return;
   }
 
+  // 🔒 On vérifie que la sélection se trouve dans un bloc autorisé
+  let node = selection.anchorNode;
+  let valid = false;
+
+  while (node) {
+    if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains("annotation-zone")) {
+      valid = true;
+      break;
+    } else if (node.classList && node.classList.contains("annotation-zone")) {
+      valid = true;
+      break;
+    }
+    node = node.parentElement || node.parentNode;
+  }
+
+  if (!valid) {
+    alert("Veuillez sélectionner un texte dans les résultats affichés (zone annotable).");
+    return;
+  }
+
   const comment = prompt("Votre commentaire sur : « " + text + " »");
   if (!comment) return;
 
@@ -631,6 +642,7 @@ document.getElementById("annotateBtn").addEventListener("click", function () {
   li.innerHTML = `<strong>${text}</strong><br>${comment}`;
   commentList.appendChild(li);
 });
+
 </script>
 
 

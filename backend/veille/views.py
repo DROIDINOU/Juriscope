@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login
 import re
 from django.http import JsonResponse
 from meilisearch import Client
+import os
 
 
 import re
@@ -13,8 +14,7 @@ import re
 def api_search(request):
     query = request.GET.get('q', '').strip()
     print("recherche globale")
-    client = Client('http://127.0.0.1:7700')
-
+    client = Client(os.getenv("MEILI_URL"))
     # Supprime le = pour l'expression regex
     search_term = query.lstrip('=').lower()
 
@@ -56,8 +56,7 @@ def api_search(request):
 def api_search_niss(request):
     query = request.GET.get('q', '').strip()
     print(f"NISS query: {query}")
-    client = Client('http://127.0.0.1:7700')
-
+    client = Client(os.getenv("MEILI_URL"))
     # Ne modifie pas la structure
     search_term = query  # Pas de transformation ici
 
@@ -93,8 +92,8 @@ def api_search_niss(request):
 def api_search_tva(request):
     query = request.GET.get('q', '').strip()
     print(f"TVA query: {query}")
-    client = Client('http://127.0.0.1:7700')
-
+    client = Client(os.getenv("MEILI_URL"))
+    
     search_term = query.lstrip('=').lower()
 
     indexes = {

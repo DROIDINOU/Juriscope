@@ -96,6 +96,8 @@
         }
 
 
+
+
 </style>
 {% endblock %}
 
@@ -285,19 +287,24 @@ Elle inclut notamment : les constitutions de sociétés, les modifications statu
                     </div>
                 </div>
                 <!-- Card Body -->
-                <div class="card-body ">
+                <div class="card-body">
+                    <!-- Résultats injectés dynamiquement ici -->
                     <div id="searchResults"></div>
-<div class="container my-4">
-  <h6>📝 Sélectionnez un passage dans les résultats, puis cliquez :</h6>
-  <button id="annotateBtn" class="btn btn-sm btn-outline-primary mt-2">➕ Annoter la sélection</button>
-
-  <div id="annotationsList" class="mt-4">
-    <h6>💬 Commentaires ajoutés :</h6>
-    <ul class="list-group" id="commentList"></ul>
-  </div>
-</div>
-
                 </div>
+
+                <!-- 🟢 Bouton et liste d'annotations en dehors de #searchResults -->
+                <div class="container my-4">
+                    <h6>📝 Sélectionnez un passage dans les résultats, puis cliquez :</h6>
+                    <button id="annotateBtn" class="btn btn-sm btn-outline-primary mt-2">
+                        ➕ Annoter la sélection
+                    </button>
+
+                    <div id="annotationsList" class="mt-4">
+                        <h6>💬 Commentaires ajoutés :</h6>
+                        <ul class="list-group" id="commentList"></ul>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -599,6 +606,8 @@ document.getElementById("searchType").addEventListener("change", function () {
 });
 
 
+
+
 </script>
 <script>
 document.getElementById("annotateBtn").addEventListener("click", function () {
@@ -652,8 +661,9 @@ document.getElementById("annotateBtn").addEventListener("click", function () {
   commentList.appendChild(li);
 });
 
-</script>
 
+
+</script>
 
 
 {% endblock %}

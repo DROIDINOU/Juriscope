@@ -535,7 +535,7 @@ function buildCategory(title, prefix, items, query, type) {
     items.forEach((item, i) => {
         let text =
             item.text || item.pdf_text || item.contenu || item.texte ||
-            item._formatted?.text ||item._formatted?.text || item._formatted?.pdf_text || item._formatted?.contenu || '(Pas de texte)';
+            item._formatted?.text || item._formatted?.pdf_text || item._formatted?.contenu || '(Pas de texte)';
 
         if (prefix === "Annexe") {
             const subtitle = item.subtitle || item._formatted?.subtitle || "";
@@ -544,16 +544,12 @@ function buildCategory(title, prefix, items, query, type) {
         }
 
         if (type === "tva") {
-    text = highlightTvaInText(text, rawTva);
-} else if (type === "niss") {
-    text = highlightNissInText(text, query);
-}
-else if (type === "global") {
-text = highlightGlobalKeywordInText(text, query.replace(/^=/, ""));
-
-}
-
-
+            text = highlightTvaInText(text, rawTva);
+        } else if (type === "niss") {
+            text = highlightNissInText(text, query);
+        } else if (type === "global") {
+            text = highlightGlobalKeywordInText(text, query.replace(/^=/, ""));
+        }
 
         const short = text.substring(0, 400) + (text.length > 400 ? "..." : "");
         const dateDoc = item.date_document || "1 janvier 2025";
@@ -572,15 +568,13 @@ text = highlightGlobalKeywordInText(text, query.replace(/^=/, ""));
                         Voir le document
                     </a>
                     <button class="btn btn-sm btn-outline-primary ml-2 annotate-inline-btn" data-item-id="${itemId}">
-    ➕ Annoter
-</button>
+                        ➕ Annoter
+                    </button>
                 </div>
-                <div class="collapse mt-2" id="${itemId}">
-  <div class="card card-body annotation-zone">${text}</div>
-  <ul class="list-group mt-2 commentList" data-id="${itemId}"></ul>
-</div>
 
-                </div>
+                <div class="collapse mt-2" id="${itemId}">
+                    <div class="card card-body annotation-zone">${text}</div>
+                    <ul class="list-group mt-2 commentList" data-id="${itemId}"></ul>
                 </div>
             </li>
         `;
@@ -589,6 +583,7 @@ text = highlightGlobalKeywordInText(text, query.replace(/^=/, ""));
     block += `</ol></div></div>`;
     return block;
 }
+
 
 document.getElementById("searchType").addEventListener("change", function () {
     const searchInput = document.getElementById("searchInput");

@@ -95,25 +95,14 @@
             box-sizing: border-box;  /* Prendre en compte la bordure et le padding dans la largeur */
         }
 
+
 </style>
 {% endblock %}
 
 {% block content %}
 <!-- Begin Page Content -->
 <div class="container-fluid">
-    <div class="alert alert-info mb-4" role="alert">
-  🔍 <strong>Vous souhaitez commenter les textes ?</strong><br>
-  Cliquez sur le bouton ci-dessous pour vous connecter à Hypothes.is.
-  <div class="mt-2">
-    <a href="https://hypothes.is/login" target="_blank" class="btn btn-sm btn-outline-secondary">
-      🔐 Se connecter
-    </a>
-    <a href="https://hypothes.is/signup" target="_blank" class="btn btn-sm btn-outline-primary ml-2">
-      🆕 Créer un compte
-    </a>
-  </div>
-  <small class="d-block mt-2 text-muted">Une fois connecté, le panneau latéral apparaîtra pour annoter.</small>
-</div>
+
     <!-- Page Heading -->
     <!-- Content Row -->
     <div class="row">
@@ -304,6 +293,15 @@ Elle inclut notamment : les constitutions de sociétés, les modifications statu
         </div>
 
     </div>
+    <div class="container my-4">
+  <h6>📝 Sélectionnez un passage dans les résultats, puis cliquez :</h6>
+  <button id="annotateBtn" class="btn btn-sm btn-outline-primary mt-2">➕ Annoter la sélection</button>
+
+  <div id="annotationsList" class="mt-4">
+    <h6>💬 Commentaires ajoutés :</h6>
+    <ul class="list-group" id="commentList"></ul>
+  </div>
+</div>
 </div>
 
 <!-- /.container-fluid -->
@@ -600,8 +598,41 @@ document.getElementById("searchType").addEventListener("change", function () {
     searchInput.placeholder = placeholders[selectedType] || "";
 });
 
+
+</script>
+<script>
+document.getElementById("annotateBtn").addEventListener("click", function () {
+  const selection = window.getSelection();
+  const text = selection.toString().trim();
+
+  if (!text) {
+    alert("Sélectionnez d'abord un texte dans les résultats.");
+    return;
+  }
+
+  const comment = prompt("Votre commentaire sur : « " + text + " »");
+  if (!comment) return;
+
+  const range = selection.getRangeAt(0);
+  const span = document.createElement("span");
+  span.style.backgroundColor = "#fff3cd";
+  span.style.borderBottom = "2px dotted #ffc107";
+  span.setAttribute("title", comment);
+  span.className = "annotated-text";
+  span.textContent = text;
+
+  range.deleteContents();
+  range.insertNode(span);
+  selection.removeAllRanges();
+
+  const commentList = document.getElementById("commentList");
+  const li = document.createElement("li");
+  li.className = "list-group-item";
+  li.innerHTML = `<strong>${text}</strong><br>${comment}`;
+  commentList.appendChild(li);
+});
 </script>
 
-<!-- Hypothes.is : Activer l’annotation sur cette page -->
-<script src="https://hypothes.is/embed.js" async></script>
+
+
 {% endblock %}

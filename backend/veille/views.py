@@ -3,19 +3,13 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import UserProfile
 from django.contrib.auth import authenticate, login
-import re
 from django.http import JsonResponse
 from meilisearch import Client
 import os
-
 import re
 
 
 def api_search(request):
-    from meilisearch import Client
-    import os
-    import re
-    from django.http import JsonResponse
 
     query = request.GET.get('q', '').strip()
     print("recherche globale")
@@ -44,12 +38,9 @@ def api_search(request):
         filtered_hits = []
         for hit in raw_hits:
             try:
-                texte_complet = (
-                        str(hit.get("text") or "") +
-                        str(hit.get("pdf_text") or "") +
-                        str(hit.get("contenu") or "") +
-                        str(hit.get("texte") or "")
-                )
+                fields = ["text", "pdf_text", "contenu", "texte"]
+                texte_complet = " ".join(str(hit.get(field, "") or "") for field in fields)
+
                 if re.search(rf'\b{re.escape(search_term)}\b', texte_complet, re.IGNORECASE):
                     filtered_hits.append(hit)
             except Exception as e:

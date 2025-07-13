@@ -12,10 +12,15 @@ import os
 import re
 
 def api_search(request):
+    import re
+    from meilisearch import Client
+    import os
+    from django.http import JsonResponse
+
     query = request.GET.get('q', '').strip()
     print("recherche globale")
     client = Client(os.getenv("MEILI_URL"))
-    # Supprime le = pour l'expression regex
+
     search_term = query.lstrip('=').lower()
 
     indexes = {
@@ -31,22 +36,23 @@ def api_search(request):
 
     for key, index_name in indexes.items():
         try:
-            # AUCUN paramètre spécial ici
             raw_hits = client.index(index_name).search(search_term).get('hits', [])
         except Exception as e:
             print(f"[ERREUR] Index '{key}' → {e}")
             raw_hits = []
 
-        # Filtrage Python exact (match mot entier dans champ "text")
         filtered_hits = [
             hit for hit in raw_hits
-            if re.search(rf'\b{re.escape(search_term)}\b', (
-                    hit.get("text", "") +
-                    hit.get("pdf_text", "") +
-                    hit.get("contenu", "") +
-                    hit.get("texte", "")
-
-            ), re.IGNORECASE)
+            if re.search(
+                rf'\b{re.escape(search_term)}\b',
+                (
+                    str(hit.get("text") or "") +
+                    str(hit.get("pdf_text") or "") +
+                    str(hit.get("contenu") or "") +
+                    str(hit.get("texte") or "")
+                ),
+                re.IGNORECASE
+            )
         ]
 
         results[key] = filtered_hits
@@ -93,7 +99,7 @@ def api_search_tva(request):
     query = request.GET.get('q', '').strip()
     print(f"TVA query: {query}")
     client = Client(os.getenv("MEILI_URL"))
-    
+
     search_term = query.lstrip('=').lower()
 
     indexes = {

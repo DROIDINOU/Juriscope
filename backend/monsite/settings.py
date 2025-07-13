@@ -10,7 +10,7 @@ SECRET_KEY = 'django-insecure-7yj+gzat15m40er!d#(ci*#@c=rt=$()y0u7tr05c01euoe$l7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['juriscope.onrender.com', 'localhost', '127.0.0.1', '6297ec3f0568.ngrok-free.app']
+ALLOWED_HOSTS = ['juriscope.onrender.com','localhost', '127.0.0.1', '6297ec3f0568.ngrok-free.app']
 
 # Application definition
 INSTALLED_APPS = [

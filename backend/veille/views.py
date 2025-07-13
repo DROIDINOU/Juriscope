@@ -8,13 +8,13 @@ from django.http import JsonResponse
 from meilisearch import Client
 import os
 
-
 import re
 
+
 def api_search(request):
-    import re
     from meilisearch import Client
     import os
+    import re
     from django.http import JsonResponse
 
     query = request.GET.get('q', '').strip()
@@ -41,23 +41,24 @@ def api_search(request):
             print(f"[ERREUR] Index '{key}' → {e}")
             raw_hits = []
 
-        filtered_hits = [
-            hit for hit in raw_hits
-            if re.search(
-                rf'\b{re.escape(search_term)}\b',
-                (
-                    str(hit.get("text") or "") +
-                    str(hit.get("pdf_text") or "") +
-                    str(hit.get("contenu") or "") +
-                    str(hit.get("texte") or "")
-                ),
-                re.IGNORECASE
-            )
-        ]
+        filtered_hits = []
+        for hit in raw_hits:
+            try:
+                texte_complet = (
+                        str(hit.get("text") or "") +
+                        str(hit.get("pdf_text") or "") +
+                        str(hit.get("contenu") or "") +
+                        str(hit.get("texte") or "")
+                )
+                if re.search(rf'\b{re.escape(search_term)}\b', texte_complet, re.IGNORECASE):
+                    filtered_hits.append(hit)
+            except Exception as e:
+                print(f"[ERREUR MATCHING] hit={hit}, erreur={e}")
 
         results[key] = filtered_hits
 
     return JsonResponse(results)
+
 
 def api_search_niss(request):
     query = request.GET.get('q', '').strip()
@@ -92,7 +93,6 @@ def api_search_niss(request):
         results[key] = filtered_hits
 
     return JsonResponse(results)
-
 
 
 def api_search_tva(request):
@@ -132,30 +132,33 @@ def api_search_tva(request):
 def home(request):
     return render(request, 'veille/home.html')
 
+
 def charts(request):
     return render(request, 'veille/charts.html')
+
 
 def contact(request):
     return render(request, 'veille/contact.html')
 
+
 def fonctionnalites(request):
     return render(request, 'veille/fonctionnalites.html')
+
 
 def recherches(request):
     return render(request, 'veille/recherches.html')
 
+
 def resultats(request):
     return render(request, 'veille/resultats.html')
+
 
 def maveille(request):
     return render(request, 'veille/maveille.html')
 
+
 def premium(request):
     return render(request, 'veille/premium.html')
-
-
-
-
 
 
 def register(request):
@@ -193,6 +196,7 @@ def register(request):
         return redirect("login")
 
     return render(request, "veille/register.html")
+
 
 def login_view(request):
     if request.method == "POST":

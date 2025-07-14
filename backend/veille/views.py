@@ -6,9 +6,13 @@ from django.contrib.auth import authenticate, login
 import re
 from django.http import JsonResponse
 from meilisearch import Client
+#from sentence_transformers import SentenceTransformer
+# django.contrib import messages
 
 
-import re
+
+
+
 
 def api_search(request):
     query = request.GET.get('q', '').strip()
